@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, FlatList, Text } from 'react-native'
+import { View, StyleSheet, FlatList, Text, ScrollView } from "react-native";
 
 import colors from '../constants/colors'
 import PaginatedFlatList from "../../../../components/PaginatedFlatlist";
@@ -41,21 +41,47 @@ class MentionBox extends React.Component {
       )
     }
 
+    const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+      const paddingToBottom = 40;
+      return layoutMeasurement.height + contentOffset.y >=
+        contentSize.height - paddingToBottom;
+    };
+
     return (
       <View style={[styles.mainContainer, this.props.style]}>
-        <FlatList
-          data={this.props.data}
-          renderItem={this.props.renderCell}
-          keyboardShouldPersistTaps="always"
-          onEndReachedThreshold={0.2}
-          scrollEnabled
-          onEndReached={this.props.onEndReached}
-          ListFooterComponent={this.props.ListFooterComponent}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          updateCellsBatchingPeriod={500}
-        />
+
+        {this.props.typeScroll === 'ScrollView'
+          ? <ScrollView
+            keyboardShouldPersistTaps={'always'}
+            onEndReachedThreshold={0.2}
+            updateCellsBatchingPeriod={500}
+            maxToRenderPerBatch={10}
+            scrollEventThrottle={400}
+            onScroll={({nativeEvent}) => {
+              if (isCloseToBottom(nativeEvent)) {
+                this.props.onEndReached()
+              }
+            }}
+          >
+            {this.props.data && this.props.data.map((item) => {
+              return this.props.renderCell({ item })
+            })}
+            {this.props.ListFooterComponent()}
+          </ScrollView>
+          : <FlatList
+            data={this.props.data}
+            renderItem={this.props.renderCell}
+            keyboardShouldPersistTaps="always"
+            onEndReachedThreshold={0.2}
+            onEndReached={this.props.onEndReached}
+            ListFooterComponent={this.props.ListFooterComponent}
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
+            windowSize={5}
+            updateCellsBatchingPeriod={500}
+          />
+        }
+
       </View>
     )
   }
