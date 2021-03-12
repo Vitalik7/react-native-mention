@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet, FlatList, Text } from 'react-native'
 
 import colors from '../constants/colors'
+import PaginatedFlatList from "../../../../components/PaginatedFlatlist";
 
 export const HEIGHT = 134
 
@@ -46,6 +47,14 @@ class MentionBox extends React.Component {
           data={this.props.data}
           renderItem={this.props.renderCell}
           keyboardShouldPersistTaps="always"
+          onEndReachedThreshold={0.2}
+          scrollEnabled
+          onEndReached={this.props.onEndReached}
+          ListFooterComponent={this.props.ListFooterComponent}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={5}
+          updateCellsBatchingPeriod={500}
         />
       </View>
     )
