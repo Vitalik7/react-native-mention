@@ -147,9 +147,11 @@ class MentionInput extends React.PureComponent {
   }
 
   onBlur = () => {
-    if (this.props.resetMentionData && typeof this.props.resetMentionData === 'function') {
-      this.props.resetMentionData()
-    }
+    this.setState({ showMentionBox: false }, () => {
+      if (this.props.resetMentionData && typeof this.props.resetMentionData === 'function') {
+        this.props.resetMentionData()
+      }
+    })
     if (this.props.onBlur && typeof this.props.onBlur === 'function') {
       this.props.onBlur()
     }
@@ -238,6 +240,7 @@ class MentionInput extends React.PureComponent {
             data={this.props.mentionData}
             style={[this.state.mentionBoxDimension, this.props.boxStyle, { height: this.props.heightBox }]}
             onEndReached={this.props.onEndReached}
+            typeScroll={this.props.typeScroll}
             ListFooterComponent={this.props.ListFooterComponent}
             renderCell={({ item, index }) => (
               <TouchableOpacity onPress={() => this.onCellPress(item)}>
@@ -252,4 +255,3 @@ class MentionInput extends React.PureComponent {
 }
 
 export default MentionInput 
-
