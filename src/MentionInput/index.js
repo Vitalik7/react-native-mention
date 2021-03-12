@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react'
 import ParsedText from 'react-native-parsed-text'
-import { Keyboard, TextInput, TouchableOpacity } from 'react-native'
+import { FlatList, Keyboard, TextInput, TouchableOpacity } from "react-native";
 
 import styles from './styles'
 import MentionBox, { HEIGHT } from './MentionBox'
+import MentionTextInput from "../../../../components/MentionsInput/MentionTextInput";
 
 class MentionInput extends React.PureComponent {
   constructor(props) {
@@ -24,6 +25,20 @@ class MentionInput extends React.PureComponent {
         right: 0,
         width: 0,
         height: HEIGHT
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    if (prevProps.currentValue !== this.props.currentValue) {
+      if (this.props.currentValue === '') {
+        this.setState({ text: '' })
+      }
+    }
+
+    if (prevProps.isFocusedScreen !== this.props.isFocusedScreen) {
+      if (!this.props.isFocusedScreen) {
+        this.setState({ showMentionBox: false, text: '' })
       }
     }
   }
@@ -101,7 +116,7 @@ class MentionInput extends React.PureComponent {
     this.setState(oldState => ({
       mentionBoxDimension: {
         ...oldState.mentionBoxDimension,
-        top: nativeEvent.contentSize.height + 10
+        top: nativeEvent.contentSize.height + (this.props.isTopBox ? - nativeEvent.contentSize.height - (this.props.heightBox ? this.props.heightBox : HEIGHT) : 20)
       }
     }))
   }
@@ -111,7 +126,7 @@ class MentionInput extends React.PureComponent {
     this.mainData = this.mainData.map(data => {
       if (data.isCursorActive) {
         const words = data.word.split('@')
-        const word = data.word.replace(`@${words[words.length - 1]}`, `@${item.name}`)
+        const word = data.word.replace(`@${words[words.length - 1]}`, `@${item[this.props.mainProp]}`)
 
         return {
           ...data,
@@ -129,6 +144,15 @@ class MentionInput extends React.PureComponent {
     })
     this.setState({ text: combinedText })
     this.props.onChangeText(combinedText)
+  }
+
+  onBlur = () => {
+    if (this.props.resetMentionData && typeof this.props.resetMentionData === 'function') {
+      this.props.resetMentionData()
+    }
+    if (this.props.onBlur && typeof this.props.onBlur === 'function') {
+      this.props.onBlur()
+    }
   }
 
   /**
@@ -185,6 +209,10 @@ class MentionInput extends React.PureComponent {
             placeholder={this.props.placeholder}
             onSelectionChange={this.onSelectionChange}
             onContentSizeChange={this.onContentSizeChange}
+            placeholderTextColor={this.props.placeholderTextColor || 'grey'}
+            onFocus={this.props.onFocus}
+            onBlur={this.onBlur}
+            maxLength={this.props.maxLength}
             style={[this.props.inputField, styles.inputField]}
           >
             <ParsedText
@@ -208,7 +236,9 @@ class MentionInput extends React.PureComponent {
         {this.state.showMentionBox && (
           <MentionBox
             data={this.props.mentionData}
-            style={this.state.mentionBoxDimension}
+            style={[this.state.mentionBoxDimension, this.props.boxStyle, { height: this.props.heightBox }]}
+            onEndReached={this.props.onEndReached}
+            ListFooterComponent={this.props.ListFooterComponent}
             renderCell={({ item, index }) => (
               <TouchableOpacity onPress={() => this.onCellPress(item)}>
                 {this.props.renderMentionCell({ item, index })}
@@ -222,3 +252,4 @@ class MentionInput extends React.PureComponent {
 }
 
 export default MentionInput 
+
