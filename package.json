@@ -27,8 +27,8 @@
   "license": "MIT",
   "homepage": "https://github.com/kusalshrestha/react-native-mention#readme",
   "dependencies": {
-    "react-native-parsed-text": "^0.0.21"
-    "react-native-gesture-handler": "^1.5.3",
+    "react-native-parsed-text": "^0.0.21",
+    "react-native-gesture-handler": "^1.5.3"
 
   },
   "devDependencies": {
