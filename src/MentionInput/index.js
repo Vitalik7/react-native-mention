@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react'
 import ParsedText from 'react-native-parsed-text'
-import { FlatList, Keyboard, TextInput, TouchableOpacity } from "react-native";
+import { FlatList, Keyboard, TextInput } from "react-native";
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import styles from './styles'
 import MentionBox, { HEIGHT } from './MentionBox'
-import MentionTextInput from "../../../../components/MentionsInput/MentionTextInput";
 
 class MentionInput extends React.PureComponent {
   constructor(props) {
@@ -121,7 +121,7 @@ class MentionInput extends React.PureComponent {
     }))
   }
 
-  onCellPress = item => {
+  onCellPress = item => e => {
     this.setState({ showMentionBox: false })
     this.mainData = this.mainData.map(data => {
       if (data.isCursorActive) {
@@ -147,11 +147,13 @@ class MentionInput extends React.PureComponent {
   }
 
   onBlur = () => {
-    this.setState({ showMentionBox: false }, () => {
-      if (this.props.resetMentionData && typeof this.props.resetMentionData === 'function') {
-        this.props.resetMentionData()
-      }
-    })
+    if (this.props.resetDataAfterBlur) {
+      this.setState({ showMentionBox: false }, () => {
+        if (this.props.resetMentionData && typeof this.props.resetMentionData === 'function') {
+          this.props.resetMentionData()
+        }
+      })
+    }
     if (this.props.onBlur && typeof this.props.onBlur === 'function') {
       this.props.onBlur()
     }
@@ -241,9 +243,10 @@ class MentionInput extends React.PureComponent {
             style={[this.state.mentionBoxDimension, this.props.boxStyle, { height: this.props.heightBox }]}
             onEndReached={this.props.onEndReached}
             typeScroll={this.props.typeScroll}
+            height={this.props.heightBox}
             ListFooterComponent={this.props.ListFooterComponent}
             renderCell={({ item, index }) => (
-              <TouchableOpacity onPress={() => this.onCellPress(item)}>
+              <TouchableOpacity onPress={this.onCellPress(item)}>
                 {this.props.renderMentionCell({ item, index })}
               </TouchableOpacity>
             )}
