@@ -1,8 +1,8 @@
 import React from 'react'
-import { View, StyleSheet, FlatList, Text, ScrollView } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
+import { ScrollView, FlatList } from 'react-native-gesture-handler'
 
 import colors from '../constants/colors'
-import PaginatedFlatList from "../../../../components/PaginatedFlatlist";
 
 export const HEIGHT = 134
 
