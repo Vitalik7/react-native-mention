@@ -215,7 +215,9 @@ class MentionInput extends React.PureComponent {
             ref={comp => {
               this.inputField = comp
               if (!this.props.refInput) {
-                this.props.setRefInput(comp)
+                if (this.props.setRefInput && typeof this.props.setRefInput === 'function') {
+                  this.props.setRefInput(comp)
+                }
               }
               this.props.reference(comp)
             }}
