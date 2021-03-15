@@ -41,6 +41,14 @@ class MentionInput extends React.PureComponent {
         this.setState({ showMentionBox: false, text: '' })
       }
     }
+
+    if (prevState.showMentionBox !== this.state.showMentionBox) {
+      if (!this.state.showMentionBox) {
+        if (this.props.onCloseMentionBox) {
+          this.props.onCloseMentionBox()
+        }
+      }
+    }
   }
 
   /**
