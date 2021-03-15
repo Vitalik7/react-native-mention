@@ -214,6 +214,9 @@ class MentionInput extends React.PureComponent {
             multiline
             ref={comp => {
               this.inputField = comp
+              if (!this.props.refInput) {
+                this.props.setRefInput(comp)
+              }
               this.props.reference(comp)
             }}
             onLayout={this.onLayout}
