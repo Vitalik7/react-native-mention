@@ -44,7 +44,7 @@ class MentionInput extends React.PureComponent {
 
     if (prevState.showMentionBox !== this.state.showMentionBox) {
       if (!this.state.showMentionBox) {
-        if (this.props.onCloseMentionBox) {
+        if (this.props.onCloseMentionBox && typeof this.props.onCloseMentionBox  === 'function') {
           this.props.onCloseMentionBox()
         }
       }
@@ -161,6 +161,9 @@ class MentionInput extends React.PureComponent {
           this.props.resetMentionData()
         }
       })
+    }
+    if (this.props.onCloseMentionBox && typeof this.props.onCloseMentionBox  === 'function') {
+      this.props.onCloseMentionBox()
     }
     if (this.props.onBlur && typeof this.props.onBlur === 'function') {
       this.props.onBlur()
