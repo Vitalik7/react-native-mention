@@ -33,6 +33,8 @@ class MentionInput extends React.PureComponent {
     if (prevProps.currentValue !== this.props.currentValue) {
       if (this.props.currentValue === '') {
         this.setState({ text: '' })
+      } else if (this.props.currentValue?.length > 0) {
+        this.setState({ text: this.props.currentValue })
       }
     }
 
