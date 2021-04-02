@@ -40,7 +40,7 @@ class MentionInput extends React.PureComponent {
 
     if (prevProps.isFocusedScreen !== this.props.isFocusedScreen) {
       if (!this.props.isFocusedScreen) {
-        this.setState({ showMentionBox: false, text: '' })
+        this.setState({ showMentionBox: false, text: this.props.currentValue ? this.props.currentValue : '' })
       }
     }
 
