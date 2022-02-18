@@ -28,8 +28,7 @@
   "homepage": "https://github.com/kusalshrestha/react-native-mention#readme",
   "dependencies": {
     "react-native-parsed-text": "^0.0.21",
-    "react-native-gesture-handler": "^1.5.3"
-
+    "react-native-gesture-handler": "^2.2.0"
   },
   "devDependencies": {
     "metro-react-native-babel-preset": "^0.57.0"
