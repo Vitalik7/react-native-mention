@@ -108,6 +108,12 @@ class MentionInput extends React.PureComponent {
     } else {
       this.setState({ showMentionBox: false })
     }
+    
+     if (text && text.length && wordAtCursor && wordAtCursor.wordLength &&
+      text.length !== wordAtCursor.wordLength
+    ) {
+      this.setState({ showMentionBox: false })
+    }
 
     this.lastCursorPosition = this.cursorPostion
   }
